@@ -45,7 +45,7 @@ python scripts/train.py \
 ```
 
 This executes the `CondOT` model (see `configs/condot.yaml`) on the Sciplex3 dataset (see `configs/tasks/sciplex3-top1k.yaml`). Here, we aim at conditioning on the scalar `dose`, which is a property of the Sciplex3 dataset, and thus choose a scalar embedding (see `configs/experiments/val.yaml`). In the example, we use PCA as a low dimensional representation (see `configs/projections/pca.yaml`), and run experiments for a selected drug, i.e., we update the config with `--config.data.target trametinib`.
-Lastly, if we want to specify a **holdout** value, we need to specify this in the config via `--config.data.holdout`.
+Lastly, if we want to specify a **holdout** value, we need to specify this in the config via `--config.datasplit.holdout. ...`.
 
 There are multiple datasets, see different config files in the `configs/tasks` folder. Multiple embedding types are available, i.e., `val` for scalars, `ohe` for features and actions, `moa` for mode-of-action embeddings (see also `notebooks/eval/mds_perturbations.ipynb` for details).
 
