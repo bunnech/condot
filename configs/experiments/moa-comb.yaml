@@ -1,0 +1,9 @@
+model:
+  embedding:
+    type: smacof
+    dim: 10
+
+  combinator:
+    type: deepset
+    hidden_units: 8
+    pool: max

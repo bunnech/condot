@@ -1,0 +1,6 @@
+model:
+  embedding:
+    type: fingerprint
+    method: RDK
+
+  combinator: False

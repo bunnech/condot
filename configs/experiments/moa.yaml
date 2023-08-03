@@ -1,0 +1,6 @@
+model:
+  embedding:
+    type: smacof
+    dim: 10
+
+  combinator: False

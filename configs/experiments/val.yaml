@@ -1,0 +1,5 @@
+model:
+  embedding:
+    type: value
+
+  combinator: False

@@ -1,0 +1,4 @@
+data:  
+  dimension_reduction:
+    name: pca
+    dims: 50
