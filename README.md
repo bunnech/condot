@@ -77,6 +77,17 @@ python scripts/train.py \
 ```
 
 To consider different dataset splits, e.g., splits into seen and unseen perturbations, add `--split` to the training call, followed by the name of the split in your dataset.
+For this experiment, we do not consider conditioning on properties, but instead the targets / perturbation themselves. For the Norman et al. dataset, `config.data.condition` is already pre-specified in the `configs/tasks/norman.yaml`.
+An exemplary function call thus could be
+```
+python scripts/train.py \
+    --outdir ./results/models-pca-50d/scrna-norman/emb-ohe/split-1/model-condot \
+    --config ./configs/condot.yaml \
+    --config ./configs/tasks/norman.yaml \
+    --config ./configs/experiments/ohe.yaml \
+    --config ./configs/projections/pca.yaml \
+    --split ./datasets/scrna-norman/split-1.csv 
+```
 
 For evaluation, please see [http://github.com/bunnech/cellot](http://github.com/bunnech/cellot).
 
