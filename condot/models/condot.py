@@ -190,6 +190,10 @@ def load_condot_model(config, restore=None, loader=None, **kwargs):
         g.load_state_dict(ckpt["g_state"])
         opts.g.load_state_dict(ckpt["opt_g_state"])
 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    f.to(device)
+    g.to(device)
+
     return (f, g), opts
 
 
