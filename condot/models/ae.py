@@ -43,6 +43,9 @@ def load_autoencoder_model(config, restore=None, **kwargs):
         if config.model.name == "autoencoder" and "code_means" in ckpt:
             model.code_means = ckpt["code_means"]
 
+    # push to GPU
+    model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+
     return model, optim
 
 
