@@ -152,3 +152,19 @@ def parse_config_cli(path, args):
     config.update(opts)
 
     return config
+
+def to_device(*args):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device_type = device.type
+
+    args_on_device = []
+
+    for x in args:
+        if device_type == 'cuda':
+            x = x.pin_memory().to(device, non_blocking=True)
+        else:
+            x = x.to(device), condition.to(device)
+        args_on_device.append(x)
+
+    return tuple(args_on_device)
+    
