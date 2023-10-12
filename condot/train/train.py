@@ -14,6 +14,7 @@ from condot.models import condot
 from condot.train.summary import Logger
 from condot.data.utils import cast_loader_to_iterator
 from condot.models.ae import compute_autoencoder_shift
+from condot.utils.helpers import to_device
 
 
 def load_lr_scheduler(optim, config):
@@ -65,6 +66,7 @@ def train_condot(outdir, config):
 
         transport = transport.detach()
         with torch.no_grad():
+            source, condition, transport = to_device(source, condition, transport)
             gl = condot.compute_loss_g(f, g, source, condition, transport).mean()
             fl = condot.compute_loss_f(
                 f, g, source, target, condition, transport
@@ -137,6 +139,7 @@ def train_condot(outdir, config):
             source.requires_grad_(True)
             opts.g.zero_grad()
 
+            source, condition = to_device(source, condition)
             gl = condot.compute_loss_g(f, g, source, condition).mean()
             if not g.softplus_wz_kernels and g.fnorm_penalty > 0:
                 gl = gl + g.penalize_w()
@@ -153,6 +156,7 @@ def train_condot(outdir, config):
 
         opts.f.zero_grad()
 
+        source, condition = to_device(source, condition)
         fl = condot.compute_loss_f(f, g, source, target, condition).mean()
         fl.backward()
         opts.f.step()
