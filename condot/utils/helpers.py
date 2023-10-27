@@ -163,7 +163,7 @@ def to_device(*args):
         if device_type == 'cuda':
             x = x.pin_memory().to(device, non_blocking=True)
         else:
-            x = x.to(device), condition.to(device)
+            x = x.to(device)
         args_on_device.append(x)
 
     return tuple(args_on_device)
