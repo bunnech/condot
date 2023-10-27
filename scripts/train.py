@@ -56,7 +56,7 @@ def main(argv):
     )
 
     symlink_to_logfile(outdir / "log")
-    write_metadata(outdir / "metadata.json", argv)
+    # write_metadata(outdir / "metadata.json", argv)
 
     cachedir = outdir / "cache"
     cachedir.mkdir(exist_ok=True)

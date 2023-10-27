@@ -7,7 +7,7 @@ from ml_collections import ConfigDict
 from pathlib import Path
 import os
 import re
-import git
+# import git
 import json
 from time import localtime, strftime
 
