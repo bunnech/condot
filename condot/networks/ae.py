@@ -105,7 +105,7 @@ class AutoEncoder(nn.Module):
         return net
 
     def encode(self, inputs, **kwargs):
-        return self.encoder_net(inputs, **kwargs)
+        return self.encoder_net(inputs, **kwargs).to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
 
     def decode(self, code, **kwargs):
         return self.decoder_net(code, **kwargs)
