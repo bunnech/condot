@@ -4,6 +4,46 @@
 
 Optimal transport (OT) theory describes general principles to define and select, among many possible choices, the most efficient way to map a probability measure onto another. That theory has been mostly used to estimate, given a pair of source and target probability measures $(\mu, \nu)$, a parameterized map $T_\theta$ that can efficiently map $\mu$ onto $\nu$. In many applications, such as predicting cell responses to treatments, pairs of input/output data measures $(\mu, \nu)$ that define optimal transport problems do not arise in isolation but are associated with a context $c$, as for instance a treatment when comparing populations of untreated and treated cells. To account for that context in OT estimation, we introduce `CondOT`, a multi-task approach to estimate a family of OT maps conditioned on a context variable, using several pairs of measures $(\mu_i, \nu_i)$ tagged with a context label $c_i$. `CondOT` learns a global map $T_\theta$ conditioned on context that is not only expected to fit all labeled pairs in the dataset ${(c_i,(\mu_i, \nu_i))}$, i.e., $T_\theta(c_i) \sharp \mu_i \approx \nu_i$, but should also generalize to produce meaningful maps $T_\theta(c_{new})$ when conditioned on unseen contexts $c_{new}$. Our approach harnesses and provides novel usage for partially input convex neural networks, for which we introduce a robust and efficient initialization strategy inspired by Gaussian approximations. We demonstrate the ability of `CondOT` to infer the effect of an arbitrary combination of genetic or therapeutic perturbations on single cells, using only observations of the effects of said perturbations separately.
 
+## Quest setup
+
+Location of repo on quest:
+```
+/projects/b1196/ewa_group/condot/`
+```
+
+Prepare environment:
+
+```
+eval "$(/software/mamba/23.1.0/bin/conda shell.bash hook)"
+CONDA_OVERRIDE_CUDA="11.2" mamba create --prefix=/projects/b1196/envs/condot -c conda-forge gxx_linux-64 gcc_linux-64 python=3.9.7 cudatoolkit=11.2
+conda activate /projects/b1196/envs/condot
+pip install pip-tools
+```
+
+Install condot:
+
+```
+cd /projects/b1196/ewa_group/condot/
+pip-compile requirements.in
+pip-sync
+python setup.py develop
+```
+
+Every new dependency should be added first to `requirements.in`, then:
+```
+pip-compile requirements.in
+pip-sync
+python setup.py develop
+```
+It will take a while to resolve the dependencies. No `pip install` for the sake of sanity :( 
+
+```
+screen -S condot
+# Run GPU here
+conda activate /projects/b1196/envs/condot
+cd /projects/b1196/ewa_group/condot/
+```
+
 ## Installation
 
 To install all dependencies, execute the following steps:
