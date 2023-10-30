@@ -210,7 +210,7 @@ def train_autoencoder(outdir, config):
             comps = {k: v.mean().item() for k, v in comps._asdict().items()}
             check_loss(loss)
             logger.log("eval", loss=loss.item(), step=step, **comps)
-
+            wandb.log({"loss": loss.item()})
         return loss
 
     def create_new_wandb_run(run_name: str, config: dict) -> None:
