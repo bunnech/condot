@@ -210,7 +210,7 @@ def train_autoencoder(outdir, config):
             comps = {k: v.mean().item() for k, v in comps._asdict().items()}
             check_loss(loss)
             logger.log("eval", loss=loss.item(), step=step, **comps)
-            wandb.log({"loss": loss.item()})
+            wandb.log({"evaluate_loss": loss.item()})
         return loss
 
     def create_new_wandb_run(run_name: str, config: dict) -> None:
@@ -247,6 +247,7 @@ def train_autoencoder(outdir, config):
         loss.backward()
         optim.step()
         check_loss(loss)
+        wandb.log({"training_loss": loss.item()})
 
         if step % config.training.logs_freq == 0:
             # log to logger object
