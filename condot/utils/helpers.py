@@ -176,3 +176,7 @@ def to_device(*args):
 def get_time():
     time = datetime.now()
     return time.strftime("%d/%m/%Y %H:%M:%S")
+
+
+def get_wandb_run_name(config: dict):
+    return config.model.name.join(get_time())
