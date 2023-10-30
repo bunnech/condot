@@ -10,6 +10,7 @@ import re
 # import git
 import json
 from time import localtime, strftime
+import torch
 
 
 def load_config(path, unparsed=None):
@@ -161,10 +162,11 @@ def to_device(*args):
 
     for x in args:
         if device_type == 'cuda':
-            x = x.pin_memory().to(device, non_blocking=True)
+            x = x.to(device, non_blocking=True)
         else:
             x = x.to(device)
+        if len(args) == 1:
+            return x
         args_on_device.append(x)
 
     return tuple(args_on_device)
-    

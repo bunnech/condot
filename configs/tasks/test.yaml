@@ -1,0 +1,9 @@
+data:
+  type: cell
+  source: control
+  condition: None
+  path: /projects/b1196/ewa_group/serniczek/data/02b_integration/02_hvg1000.h5ad
+
+dataloader:
+    batch_size: 256
+    shuffle: true

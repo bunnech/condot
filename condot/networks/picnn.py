@@ -7,6 +7,8 @@ from torch import nn
 
 # internal imports
 from condot.networks.layers import NonNegativeLinear
+from condot.utils.helpers import to_device
+
 
 ACTIVATIONS = {
     "relu": nn.ReLU,
@@ -114,6 +116,8 @@ class PICNN(nn.Module):
                 nn.init.zeros_(layer.bias)
 
     def forward(self, x, y):
+
+        x = to_device(x)
         # get label (combination) embedding
         if self.combinator:
             y = self.combinator(y)
@@ -148,14 +152,15 @@ class PICNN(nn.Module):
         return z
 
     def transport(self, x, y):
+        x = to_device(x)
         assert x.requires_grad
 
         (output,) = autograd.grad(
             self.forward(x, y),
-            x,
+            to_device(x),
             create_graph=True,
             only_inputs=True,
-            grad_outputs=torch.ones((x.size()[0], 1), device=x.device).float(),
+            grad_outputs=torch.ones((to_device(x).size()[0], 1), device=x.device).float(),
         )
         return output
 

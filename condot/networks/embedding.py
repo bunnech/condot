@@ -5,6 +5,8 @@ import pandas as pd
 import torch
 from sklearn import preprocessing
 
+from condot.utils.helpers import to_device
+
 
 class EmbeddingSMACOF():
     """Queries precomputed SMACOF embedding of conditions."""
@@ -17,7 +19,7 @@ class EmbeddingSMACOF():
         return pd.read_hdf(emb_config.path, f'smacof_{emb_config.dim}d')
 
     def forward(self, y):
-        return torch.Tensor(self.embedding[y].values)
+        return to_device(torch.Tensor(self.embedding[y].values))
 
 
 class EmbeddingFingerprint():
@@ -36,7 +38,7 @@ class EmbeddingFingerprint():
                         embedding[f"{emb_config.method} Fingerprint"]))
 
     def forward(self, y):
-        return torch.Tensor(list(map(float, self.embedding[y])))
+        return to_device(torch.Tensor(list(map(float, self.embedding[y]))))
 
 
 class EmbeddingOneHot():
@@ -51,7 +53,7 @@ class EmbeddingOneHot():
         self.lb.fit(multi_labels)
 
     def forward(self, y):
-        return torch.Tensor(self.lb.transform([y.split("+")])[0])
+        return to_device(torch.Tensor(self.lb.transform([y.split("+")])[0]))
 
 
 class EmbeddingValue():
@@ -61,4 +63,4 @@ class EmbeddingValue():
 
     def forward(self, y):
         dose = [float(y) / self.factor]
-        return torch.Tensor(dose)
+        return to_device(torch.Tensor(dose))

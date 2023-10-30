@@ -64,9 +64,8 @@ def train_condot(outdir, config):
         source.requires_grad_(True)
         transport = g.transport(source, condition)
 
-        transport = transport.detach()
+        transport = transport.cpu().detach()
         with torch.no_grad():
-            source, condition, transport = to_device(source, condition, transport)
             gl = condot.compute_loss_g(f, g, source, condition, transport).mean()
             fl = condot.compute_loss_f(
                 f, g, source, target, condition, transport
@@ -75,10 +74,10 @@ def train_condot(outdir, config):
                 f, g, source, target, condition, transport
             )
             mmd = losses.compute_scalar_mmd(
-                target.detach().numpy(), transport.detach().numpy()
+                target.cpu().detach().numpy(), transport.cpu().detach().numpy()
             )
             wst = losses.wasserstein_loss(
-                target.detach(), transport.detach()
+                target.cpu().detach(), transport.cpu().detach()
             )
 
         # log to logger object
@@ -139,7 +138,6 @@ def train_condot(outdir, config):
             source.requires_grad_(True)
             opts.g.zero_grad()
 
-            source, condition = to_device(source, condition)
             gl = condot.compute_loss_g(f, g, source, condition).mean()
             if not g.softplus_wz_kernels and g.fnorm_penalty > 0:
                 gl = gl + g.penalize_w()
@@ -156,7 +154,6 @@ def train_condot(outdir, config):
 
         opts.f.zero_grad()
 
-        source, condition = to_device(source, condition)
         fl = condot.compute_loss_f(f, g, source, target, condition).mean()
         fl.backward()
         opts.f.step()

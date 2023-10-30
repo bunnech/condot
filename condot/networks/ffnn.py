@@ -5,6 +5,8 @@ import torch
 from torch import autograd
 from torch import nn
 
+from condot.utils.helpers import to_device
+
 ACTIVATIONS = {
     "relu": nn.ReLU,
     "leakyrelu": nn.LeakyReLU,
@@ -46,6 +48,8 @@ class FFNN(nn.Module):
         self.wy = nn.Linear(input_dim_label, units[0], bias=True)
 
     def forward(self, x, y):
+
+        x = to_device(x)
         # get label (combination) embedding
         if self.combinator:
             y = self.combinator(y)
@@ -69,6 +73,7 @@ class FFNN(nn.Module):
         return z
 
     def transport(self, x, y):
+        x = to_device(x)
         assert x.requires_grad
 
         (output,) = autograd.grad(

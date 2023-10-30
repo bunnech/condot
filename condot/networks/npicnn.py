@@ -10,6 +10,7 @@ from functools import reduce
 
 # internal imports
 from condot.networks.layers import NonNegativeLinear, PosDefPotentials
+from condot.utils.helpers import to_device
 
 ACTIVATIONS = {
     "relu": nn.ReLU,
@@ -164,6 +165,8 @@ class NPICNN(nn.Module):
                                 out_features=self.neural_embedding[1])
 
     def forward(self, x, y):
+        x = to_device(x)
+
         # get label (combination) embedding
         if self.combinator:
             y = self.combinator(y)
@@ -200,6 +203,7 @@ class NPICNN(nn.Module):
         return z
 
     def transport(self, x, y):
+        x = to_device(x)
         assert x.requires_grad
 
         (output,) = autograd.grad(

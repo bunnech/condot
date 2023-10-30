@@ -11,6 +11,8 @@ from condot.networks.npicnn import NPICNN
 from condot.networks import embedding
 from condot.networks import combinator
 
+from condot.utils.helpers import to_device
+
 
 FGPair = namedtuple("FGPair", "f g")
 
@@ -202,7 +204,7 @@ def compute_loss_g(f, g, source, condition, transport=None):
         transport = g.transport(source, condition)
 
     return f(transport, condition) - torch.multiply(
-        source, transport).sum(-1, keepdim=True)
+        to_device(source), to_device(transport)).sum(-1, keepdim=True)
 
 
 def compute_g_constraint(g, form=None, beta=0):
@@ -240,9 +242,9 @@ def compute_w2_distance(f, g, source, target, condition, transport=None):
 
         cost = (
             f(transport, condition)
-            - torch.multiply(source, transport).sum(-1, keepdim=True)
+            - torch.multiply(to_device(source), to_device(transport)).sum(-1, keepdim=True)
             - f(target, condition)
-            + Cpq
+            + to_device(Cpq)
         )
         cost = cost.mean()
     return cost
