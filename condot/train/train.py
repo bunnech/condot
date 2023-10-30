@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 # imports
+import wandb
 from pathlib import Path
 import torch
 import numpy as np
@@ -15,6 +16,7 @@ from condot.train.summary import Logger
 from condot.data.utils import cast_loader_to_iterator
 from condot.models.ae import compute_autoencoder_shift
 from condot.utils.helpers import to_device
+
 
 
 def load_lr_scheduler(optim, config):
@@ -212,6 +214,12 @@ def train_autoencoder(outdir, config):
 
         return loss
 
+    def create_new_wandb_run(project_name: str, config: dict) -> None:
+        wandb.init(project=project_name, config=config)
+        return None
+
+    # project_name = '' / add date and shit
+    create_new_wandb_run(project_name=project_name, config=config)
     logger = Logger(outdir / "cache/scalars")
     cachedir = outdir / "cache"
     model, optim, loader = load(config, restore=cachedir / "last.pt")

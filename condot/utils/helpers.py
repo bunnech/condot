@@ -11,6 +11,7 @@ import re
 import json
 from time import localtime, strftime
 import torch
+from datetime import datetime
 
 
 def load_config(path, unparsed=None):
@@ -170,3 +171,8 @@ def to_device(*args):
         args_on_device.append(x)
 
     return tuple(args_on_device)
+
+
+def get_time():
+    time = datetime.now()
+    return time.strftime("%d/%m/%Y %H:%M:%S")
