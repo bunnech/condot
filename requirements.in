@@ -17,3 +17,4 @@ ott-jax==0.4.2
 #gitpython==3.1.31
 tables
 geomloss
+wandb
