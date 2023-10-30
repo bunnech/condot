@@ -4,6 +4,7 @@
 import wandb
 from pathlib import Path
 import torch
+import torch.nn as nn
 import numpy as np
 from absl import logging
 from tqdm import trange
@@ -236,10 +237,16 @@ def train_autoencoder(outdir, config):
     eval_loss = best_eval_loss
 
     ticker = trange(step, n_iters, initial=step, total=n_iters)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if torch.cuda.device_count() > 1:
+        model = nn.DataParallel(model)
+    model.to(device)
+
     for step in ticker:
 
         model.train()
         inputs = next(iterator.train)
+        inputs = to_device(inputs)
         optim.zero_grad()
         loss, comps, _ = model(inputs)
         loss = loss.mean()
@@ -264,7 +271,6 @@ def train_autoencoder(outdir, config):
 
         if step % config.training.cache_freq == 0:
             torch.save(state_dict(model, optim, step=(step + 1)), cachedir / "last.pt")
-
             logger.flush()
 
         if scheduler is not None:
